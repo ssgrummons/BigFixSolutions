@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <results version="5">
+        <statusItem ID="1">
+            <name>Auto Time Zone Updater</name>
+            <actionName>Starting Auto Time Zone Updater</actionName>
+            <status></status>
+            <display>false</display>
+            <relevance relID="101">if ((exists it and start type of it ="auto") of service "tzautoupdate") then "pass" else "fail"</relevance>
+        </statusItem>
+		<statusItem ID="2">
+            <name>Symantec EndPoint Protection</name>
+            <actionName>Installing Symantec EndPoint Protection</actionName>
+            <status></status>
+            <display>true</display>
+            <relevance relID="117">if NOT (exists file "C:\Program Files (x86)\Symantec\Symantec Endpoint Protection\SepLiveUpdate.exe" whose (version of it &gt;= "12.1.7004.6500" as version)) then "fail" else "pass"</relevance>
+        </statusItem>
+        <statusItem ID="3">
+            <name>Mozilla Firefox</name>
+            <actionName>Installing Mozilla Firefox</actionName>
+            <status></status>
+            <display>true</display>
+            <relevance relID="108">if NOT (exists regapp whose ((name of it as lowercase = "firefox.exe" as lowercase ) AND (version of it &gt;= "45.0.1" as version))) then "fail" else "pass"</relevance>
+        </statusItem>
+        </statusItem>
+        <statusItem ID="4">
+            <name>Oracle Java</name>
+            <actionName>Installing Oracle Java</actionName>
+            <status></status>
+            <display>true</display>
+            <relevance relID="111">if NOT (exists keys "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{26A24AE4-039D-4CA4-87B4-2F83218091F0}" whose (exists values whose (name of it = "InstallLocation" AND it as string as lowercase contains "jre1.8.0_91" as lowercase) of it) of registry) then "fail" else "pass"</relevance>
+        </statusItem>
+        <statusItem ID="5">
+            <name>Customize Windows Start Tiles</name>
+            <actionName>Customizing Windows Start Tiles</actionName>
+            <status></status>
+            <display>false</display>
+            <relevance relID="114">if (not exists setting "tilesRan" whose (value of it = "0") of site "CustomSite_IBM_WIN_Provisioning") then "fail" else "pass"</relevance>
+        </statusItem>
+        <statusItem ID="6">
+            <name>Configure Windows Settings</name>
+            <actionName>Configuring Windows Settings</actionName>
+            <status></status>
+            <display>true</display>
+            <relevance relID="115">if ((not exists key "HKLM\Software\Policies\Microsoft\Windows\CloudContent" whose (value "DisableWindowsConsumerFeatures" of it=1) of native registry) OR (not exists key (pathname of user key of logged on user &amp; "\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced") whose (value "HideFileExt" of it=0) of native registry)) then "fail" else "pass"</relevance>
+        </statusItem>
+		<statusItem ID="7">
+            <name>BitLocker Encryption</name>
+            <actionName>Enabling BitLocker Encryption</actionName>
+            <status></status>
+            <display>true</display>
+            <relevance relID="118">if ((exists string values whose (it="0") of selects ("ConversionStatus,DriveLetter from win32_encryptablevolume where DriveLetter=&apos;C:&apos;") of WMIs "root\cimv2\security\microsoftvolumeencryption" and exists string values whose (it="True") of selects ("IsVolumeInitializedForProtection,DriveLetter from win32_encryptablevolume where DriveLetter=&apos;C:&apos;") of WMIs "root\cimv2\security\microsoftvolumeencryption") OR (exists string values whose (it="2") of selects ("ConversionStatus,DriveLetter from win32_encryptablevolume where DriveLetter=&apos;C:&apos;") of WMIs "root\cimv2\security\microsoftvolumeencryption") OR (exists string values whose (it="1") of selects ("ConversionStatus,DriveLetter from win32_encryptablevolume where DriveLetter=&apos;C:&apos;") of WMIs "root\cimv2\security\microsoftvolumeencryption")) then "pass" else "fail"</relevance>
+        </statusItem>
+    </results>
+</root>

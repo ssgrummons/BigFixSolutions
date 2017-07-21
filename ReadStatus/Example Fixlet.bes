@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BES xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BES.xsd">
+	<Fixlet>
+		<Title>Start Auto Time Zone Updater</Title>
+		<Description>This fixlet turns on the Auto Time Zone Updater service. </Description>
+		<Relevance><![CDATA[version of client >= "8.2"]]></Relevance>
+		<Relevance>windows of operating system</Relevance>
+		<Relevance>(exists it and start type of it !="auto") of service "tzautoupdate"</Relevance>
+		<Category>PC@IBM Provisioning</Category>
+		<Source>Internal</Source>
+		<SourceID></SourceID>
+		<SourceReleaseDate>2016-07-27</SourceReleaseDate>
+		<SourceSeverity></SourceSeverity>
+		<CVENames></CVENames>
+		<SANSID></SANSID>
+		<MIMEField>
+			<Name>x-fixlet-modification-time</Name>
+			<Value>Thu, 18 Aug 2016 17:53:21 +0000</Value>
+		</MIMEField>
+		<Domain>BESC</Domain>
+		<DefaultAction ID="Action1">
+			<Description>
+				<PreLink>Click </PreLink>
+				<Link>here</Link>
+				<PostLink> to deploy this action.</PostLink>
+			</Description>
+			<ActionScript MIMEType="application/x-Fixlet-Windows-Shell"><![CDATA[//**Begin Pre-install Marker
+
+// ADD CUSTOM PRE INSTALL SCRIPTS HERE
+
+/////////////////////////
+//   PRE XML UPDATE    //
+/////////////////////////
+
+// GLOBAL VARIABLES
+parameter "localAppDataFolder" = "{value "LOCALAPPDATA" of key (pathname of user key of logged on user & "\Volatile Environment") of native registry as string}"
+parameter "splashFolder" = "{parameter "localAppDataFolder"}\IBM\Splash"
+
+// MODIFY THESE VARIABLES BASED ON THE FIXLET
+parameter "relID" = "101"  
+
+// UPDATE XML
+override wait
+runas=agent
+hidden=true
+wait cmd.exe /c cscript "{parameter "splashFolder"}\updateXML.vbs" {parameter "relID"} Pre
+
+/////////////////////////
+// END PRE XML UPDATE  //
+/////////////////////////
+
+//**End Pre-install Marker
+
+if {(exists it and state of it !="Running") of service "tzautoupdate"}
+	waithidden sc config tzautoupdate start= auto
+	waithidden net start tzautoupdate
+endif
+
+//**Begin Post-install Marker
+
+// ADD CUSTOM POST INSTALL SCRIPTS HERE
+
+/////////////////////////
+//  POST TASK UPDATE   //
+/////////////////////////
+
+// UPDATE XML
+override wait
+runas=agent
+hidden=true
+wait cmd.exe /c cscript "{parameter "splashFolder"}\updateXML.vbs" {parameter "relID"} Post
+
+//////////////////////////
+// END POST TASK UPDATE //
+//////////////////////////
+
+//**End Post-install Marker]]></ActionScript>
+		</DefaultAction>
+	</Fixlet>
+</BES>
